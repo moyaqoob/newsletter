@@ -6,9 +6,9 @@ async fn greet(req:HttpRequest) -> impl Responder {
     HttpResponse::Ok().body(format!("hello {}",name))
 }
 
-// #[tokio::main]
-fn main() -> std::io::Result<()>{
-    let body  = async move {
+#[tokio::main]
+async fn main() -> Result<(),std::io::Error>{
+    let body  =async move {
         HttpServer::new(||{
             App::new()
                 .route("/",web::get().to(greet) )  
@@ -16,7 +16,10 @@ fn main() -> std::io::Result<()>{
         })
         .bind("127.0.0.1:8080")?
         .run()
-    }
+        .await
+    };
+
+    body.await
 
     
     
